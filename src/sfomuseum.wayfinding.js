@@ -117,7 +117,8 @@ class WayfindingElement extends HTMLElement {
 	    return false;
 	}
 	
-	var wrapper = document.createElement("div");	  
+	var wrapper = document.createElement("div");
+	wrapper.setAttribute("class", "sfomuseum-wayfinding");
 	wrapper.appendChild(sel);
 	wrapper.appendChild(btn);
 	
