@@ -185,8 +185,17 @@ class WayfindingElement extends HTMLElement {
 
 	var count = items.length;
 
+	const zeroPad = (num, places) => String(num).padStart(places, '0');
+
 	for (var i=0; i < count; i++){
 	    var k = items[i][key];
+
+	    if (m){
+		var num = zeroPad(m[2], 3);
+		console.log("N", m[2], num);
+		k = m[1] + num;
+	    }
+
 	    keys.push(k)
 	    tmp[k] = i;
 	}
