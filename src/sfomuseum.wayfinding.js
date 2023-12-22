@@ -35,15 +35,15 @@ class WayfindingElement extends HTMLElement {
 	    return false;
 	}
 	
-	var start = parseInt(this.getAttribute("start"));
+	var destination = parseInt(this.getAttribute("destination"));
 
-	if (start === NaN){
-	    console.log("Invalid start attribute");
+	if (destination === NaN){
+	    console.log("Invalid destination attribute");
 	    return;
 	}
 	
-	if (! this.network[start]){
-	    console.log("Unknown start point");
+	if (! this.network[destination]){
+	    console.log("Unknown destination point");
 	    return false;
 	}
 
@@ -55,7 +55,7 @@ class WayfindingElement extends HTMLElement {
 	
 	for (var id in this.network){
 	    
-	    if (id == start){
+	    if (id == destination){
 		continue;
 	    }
 	    
@@ -84,7 +84,7 @@ class WayfindingElement extends HTMLElement {
 	    
 	    var opt = document.createElement("option");
 	    opt.setAttribute("value", wp.id);
-	    opt.appendChild(document.createTextNode(wp.name + " " + wp.placetype));
+	    opt.appendChild(document.createTextNode(wp.name));
 	    sel.appendChild(opt);
 	}
 	
@@ -92,21 +92,29 @@ class WayfindingElement extends HTMLElement {
 	  btn.appendChild(document.createTextNode("route"));
 	  
 	btn.onclick = function(){
-	    var end = sel.value;
 
-	    if (! _self.network[end]){
-		console.log("Unknown end point");
+	    var from = sel.value;
+
+	    if (! _self.network[from]){
+		console.log("Unknown starting point");
 		return false;
 	    }
 
 	    var params = new URLSearchParams();
-	    params.set("from", start);
-	    params.set("to", end);
+	    params.set("from", from);
+	    params.set("to", destination);
 
 	    var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();
+	    // window.open(url, "wayfinding");
 
-	    console.log("GO", url);
-	    window.open(url, "wayfinding");
+	    var root = _self.shadowRoot;
+
+	    var dialog = root.getElementById("sfomuseum-wayfinding-dialog");
+	    var iframe = root.getElementById("sfomuseum-wayfinding-dialog-iframe");
+
+	    iframe.src = url;
+	    dialog.showModal();
+
 	    return false;
 	}
 	
@@ -114,7 +122,36 @@ class WayfindingElement extends HTMLElement {
 	wrapper.setAttribute("class", "sfomuseum-wayfinding");
 	wrapper.appendChild(sel);
 	wrapper.appendChild(btn);
-	
+
+	var dialog = document.createElement("dialog");
+	dialog.setAttribute("id", "sfomuseum-wayfinding-dialog");
+	dialog.setAttribute("style", "height: 90vw;width: 100vw;border: solid 5px #8a741d;");
+
+	var form = document.createElement("form");
+	form.setAttribute("method", "dialog");
+
+	var close_div = document.createElement("div");
+	close_div.setAttribute("id", "sfomuseum-wayfinding-dialog-close");
+	close_div.setAttribute("style", "display:grid;justify-content: right;margin-bottom:1rem;width: 99vw;");
+
+	var close_btn = document.createElement("input");
+	close_btn.setAttribute("type", "submit");
+	// close_btn.setAttribute("class", "btn");
+	close_btn.setAttribute("style", "color: #8a741d; border: solid 1px #8a741d; border-radius: 80px; background-color: transparent; width: 25px; height: 25px; font-weight: 700;");
+	close_btn.setAttribute("value", "X");
+
+	close_div.appendChild(close_btn);
+	form.appendChild(close_div);
+
+	var iframe = document.createElement("iframe");
+	iframe.setAttribute("id", "sfomuseum-wayfinding-dialog-iframe");
+	iframe.setAttribute("style", "height: 90vw; width: 100vw;margin:0 auto;display:grid;");
+
+	form.appendChild(iframe);
+	dialog.appendChild(form);
+
+	wrapper.appendChild(dialog);
+
 	shadow.appendChild(wrapper);
     }
 

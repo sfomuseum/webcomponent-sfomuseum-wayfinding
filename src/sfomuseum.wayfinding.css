@@ -1,3 +1,19 @@
+sfomuseum-wayfinding {
+    display:inline-block;
+}
+
+#sfomuseum-wayfinding-dialog {
+    /* set inline in javascript because webcomponent/shadow root */
+}
+
+#sfomuseum-wayfinding-dialog-close {
+    /* set inline in javascript because webcomponent/shadow root */
+}
+
+#sfomuseum-wayfinding-dialog-iframe {
+    /* set inline in javascript because webcomponent/shadow root */
+}
+    
 .sfomuseum-wayfinding {
 
 }
