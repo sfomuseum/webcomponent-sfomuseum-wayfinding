@@ -52,7 +52,8 @@ class WayfindingElement extends HTMLElement {
 	var gates = [];
 	
 	var sel = document.createElement("select");
-	
+	sel.setAttribute("style", "border-radius: 0px; border: none; border-bottom: solid thin; background-color: transparent; font-size:.933rem; font-family: cartogothic,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; color: #5d5d5d;");
+
 	for (var id in this.network){
 	    
 	    if (id == destination){
@@ -88,9 +89,15 @@ class WayfindingElement extends HTMLElement {
 	    sel.appendChild(opt);
 	}
 	
-	  var btn = document.createElement("button");
-	  btn.appendChild(document.createTextNode("route"));
-	  
+	var btn = document.createElement("button");
+	btn.setAttribute("style", "border-radius:0px; border:none; background-color: transparent; margin-left:.5rem;");
+	// btn.appendChild(document.createTextNode("route"));
+
+	/* https://icons.getbootstrap.com/icons/map/ */
+	btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"/>
+</svg>`;
+
 	btn.onclick = function(){
 
 	    var from = sel.value;
@@ -104,17 +111,33 @@ class WayfindingElement extends HTMLElement {
 	    params.set("from", from);
 	    params.set("to", destination);
 
-	    var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();
-	    // window.open(url, "wayfinding");
+	    var inline = _self.hasAttribute("inline");
+
+	    if (! inline){
+		var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();		
+		window.open(url, "wayfinding");
+	    }
+		
+	    // Something something something wasm all the things (including the JS/markup)...
+
+	    params.set("nc", 1);	// nochrome
+	    var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();		
 
 	    var root = _self.shadowRoot;
 
 	    var dialog = root.getElementById("sfomuseum-wayfinding-dialog");
 	    var iframe = root.getElementById("sfomuseum-wayfinding-dialog-iframe");
 
-	    iframe.src = url;
-	    dialog.showModal();
+	    iframe.onload = function(e){
+ 		dialog.showModal();
+	    };
 
+	    iframe.onerror = function(err){
+		console.log("Failed to load iframe", url, err);
+		alert("Oh no! There was a problem loading that route.");
+	    };
+	    
+	    iframe.src = url;
 	    return false;
 	}
 	
