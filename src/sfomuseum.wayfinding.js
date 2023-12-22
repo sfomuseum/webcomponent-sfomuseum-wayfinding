@@ -190,9 +190,10 @@ class WayfindingElement extends HTMLElement {
 	for (var i=0; i < count; i++){
 	    var k = items[i][key];
 
+	    var m = k.match(/(Gate\s+[A-G])(\d+)/);
+
 	    if (m){
 		var num = zeroPad(m[2], 3);
-		console.log("N", m[2], num);
 		k = m[1] + num;
 	    }
 
