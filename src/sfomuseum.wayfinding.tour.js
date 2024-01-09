@@ -7,7 +7,7 @@ class TourWayfindingElement extends HTMLElement {
 	super();
 	
 	this.fetch_network().catch((err) => {
-	    console.log("SAD", err)
+	    console.log("Failed to load network", err)
 	});
     }
     
@@ -16,7 +16,7 @@ class TourWayfindingElement extends HTMLElement {
 	this.fetch_network().then(rsp => {
 	    this.draw();
 	}).catch((err) => {
-	    console.log("SAD", err)
+	    console.log("Failed to load network", err)
 	});
     }
 
@@ -89,7 +89,7 @@ class TourWayfindingElement extends HTMLElement {
 	    return false;
 	}
 
-	var wrapper = document.createElement("span");
+	var wrapper = document.createElement("div");
 	wrapper.appendChild(document.createTextNode("Loading"));
 	shadow.appendChild(wrapper);
 
@@ -104,27 +104,45 @@ class TourWayfindingElement extends HTMLElement {
 	fetch(url).then(rsp =>
 	    rsp.json()
 	).then(data => {
-	    console.log("OK", data);
-	    console.log("FOO",);
+
+	    var map_id = "map-" + from_waypoint + "-" + to_waypoint;
+	    
+	    var map_el = document.createElement("div");
+	    map_el.setAttribute("class", "map");
+	    map_el.setAttribute("id", map_id);
+
+	    map_el.appendChild(document.createTextNode("map"));
+	    
+	    var root = _self.shadowRoot;
+	    root.innerHTML = "";
+	    
+	    var tpl = document.getElementById("sfomuseum-tour-wayfinding-template");
+
+	    if (tpl){
+		let tpl_content = tpl.content;
+		root.appendChild(tpl_content.cloneNode(true));
+	    }
+	    
+	    root.appendChild(map_el);
+
+	    _self.foo(map_id);
+	    
 	}).catch(err => {
-	    console.log("SAD", err);
+	    console.log("Failed to complete routing", err);
 	});
 	
-	/*
-	var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();		
-	
-	var iframe = document.createElement("iframe");
-	
-	iframe.onerror = function(err){
-	    console.log("Failed to load iframe", url, err);
-	    alert("Oh no! There was a problem loading that route.");
-	};
-	
-	iframe.src = url;
-	*/
-
     }
 
+    foo(map_id){
+	    var map = L.map(map_id, {});
+	    // var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
+	    console.log("MAP", map);
+	    
+	    var bounds = sfomuseum.maps.campus.campusBounds();	
+	    map.fitBounds(bounds);
+
+    }
+    
     load_network(){
 
     	try {
