@@ -1,6 +1,6 @@
 class TourWayfindingElement extends HTMLElement {
 
-    // https://tmp.larlet.fr/leaflet-map/
+    // See also: https://tmp.larlet.fr/leaflet-map/
     
     network = null
     
@@ -112,6 +112,8 @@ class TourWayfindingElement extends HTMLElement {
 	    var map_el = document.createElement("div");
 	    map_el.setAttribute("class", "map");
 	    map_el.setAttribute("id", map_id);
+	    map_el.setAttribute("data-map-provider", "protomaps");
+	    map_el.setAttribute("data-protomaps-tile-url", "https://static.sfomuseum.org/pmtiles/sfomuseum_v3/{z}/{x}/{y}.mvt?key=");
 	    
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
@@ -134,30 +136,25 @@ class TourWayfindingElement extends HTMLElement {
     }
 
     draw_map(map_el, steps){
-	
-	var map = L.map(map_el, {});
-	// var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
+
+	var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
 	
 	var bounds = sfomuseum.maps.campus.campusBounds();	
 	map.fitBounds(bounds);
 
+	if (this.hasAttribute("disable-scroll")){
+	    map.scrollWheelZoom.disable();
+	}
+
+	var no_popups = this.hasAttribute("disable-popups");
+	
+	var steps_args = {
+	    no_popups: no_popups,
+	};
+	
+	sfomuseum.wayfinding.route.draw_route(map, steps, steps_args);
     }
     
-    load_network(){
-
-    	try {
-	    return JSON.parse(this.network_data());
-	} catch (err){
-	    console.log("Failed to parse network data", err);
-	    return null;
-	}
-    }
-
-    network_data(){
-	
-
-
-    }
 }
 
 customElements.define('sfomuseum-tour-wayfinding', TourWayfindingElement);
