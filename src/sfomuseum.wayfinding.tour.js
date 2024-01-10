@@ -1,5 +1,7 @@
 class TourWayfindingElement extends HTMLElement {
 
+    // https://tmp.larlet.fr/leaflet-map/
+    
     network = null
     
     constructor() {
@@ -14,7 +16,7 @@ class TourWayfindingElement extends HTMLElement {
     connectedCallback() {
 
 	this.fetch_network().then(rsp => {
-	    this.draw();
+	    this.route();
 	}).catch((err) => {
 	    console.log("Failed to load network", err)
 	});
@@ -57,7 +59,7 @@ class TourWayfindingElement extends HTMLElement {
 	});
     }
     
-    draw(){
+    route(){
 			      
 	const shadow = this.attachShadow({ mode: "open" });
 
@@ -103,15 +105,13 @@ class TourWayfindingElement extends HTMLElement {
 	
 	fetch(url).then(rsp =>
 	    rsp.json()
-	).then(data => {
+	).then(steps => {
 
 	    var map_id = "map-" + from_waypoint + "-" + to_waypoint;
 	    
 	    var map_el = document.createElement("div");
 	    map_el.setAttribute("class", "map");
 	    map_el.setAttribute("id", map_id);
-
-	    map_el.appendChild(document.createTextNode("map"));
 	    
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
@@ -125,7 +125,7 @@ class TourWayfindingElement extends HTMLElement {
 	    
 	    root.appendChild(map_el);
 
-	    _self.foo(map_id);
+	    _self.draw_map(map_el, steps);
 	    
 	}).catch(err => {
 	    console.log("Failed to complete routing", err);
@@ -133,13 +133,13 @@ class TourWayfindingElement extends HTMLElement {
 	
     }
 
-    foo(map_id){
-	    var map = L.map(map_id, {});
-	    // var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
-	    console.log("MAP", map);
-	    
-	    var bounds = sfomuseum.maps.campus.campusBounds();	
-	    map.fitBounds(bounds);
+    draw_map(map_el, steps){
+	
+	var map = L.map(map_el, {});
+	// var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
+	
+	var bounds = sfomuseum.maps.campus.campusBounds();	
+	map.fitBounds(bounds);
 
     }
     
