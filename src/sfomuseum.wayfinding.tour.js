@@ -148,7 +148,7 @@ class TourWayfindingElement extends HTMLElement {
 
 	var no_popups = this.hasAttribute("disable-popups");
 	var with_arrowheads = this.hasAttribute("arrowheads");
-	
+
 	var steps_args = {
 	    no_popups: no_popups,
 	    arrowheads: with_arrowheads,

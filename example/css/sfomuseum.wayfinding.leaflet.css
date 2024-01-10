@@ -1,0 +1,26 @@
+.leaflet-control-attribution {
+	display: none !important;
+}
+
+.leaflet-control-resizer-s {
+	background-color: #fff !important;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	height: 12px !important;
+	opacity: .8 !important;
+}
+
+.leaflet-control-resizer-s::after {
+	width: 0;
+	height: 0;
+	border-left: 15px solid transparent !important;
+	border-right: 15px solid transparent !important;
+	border-top: 5px solid #999;
+	border-bottom-width: 0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+	opacity: .9;
+	font-weight: 700;
+	color: darkblue;
+}
