@@ -8,12 +8,8 @@ class TourWayfindingElement extends HTMLElement {
     network = null
     
     constructor() {
-	
 	super();
-
-	this.fetch_network().catch((err) => {
-	    console.log("Failed to load network", err)
-	});
+	// There does not appear to be any benefit in trying to preload/cache the network data here
     }
     
     connectedCallback() {
@@ -30,7 +26,7 @@ class TourWayfindingElement extends HTMLElement {
 		this.api_endpoint = endpoint;
 	    }
 	}
-
+	
 	this.fetch_network().then(rsp => {
 	    this.route();	    
 	}).catch((err) => {
@@ -43,7 +39,12 @@ class TourWayfindingElement extends HTMLElement {
 	var _self = this;
 	
 	return new Promise((resolve, rejext) => {
-	
+
+	    if (_self.network){
+		resolve();
+		return;
+	    }
+	    
 	    if (_self.wasm_endpoint){
 
 		_self.fetch_network_wasm().then(rsp => {
@@ -68,8 +69,13 @@ class TourWayfindingElement extends HTMLElement {
 	var _self = this;
 	
 	return new Promise((resolve, reject) => {
+
+	    if (! _self.wasm_endpoint){
+		reject();
+		return;
+	    }
 	    
-	    sfomuseum.wasm.fetch("../lib/sfomuseum_route.wasm").then((rsp) => {
+	    sfomuseum.wasm.fetch(_self.wasm_endpoint).then((rsp) => {
 		
 		sfomuseum_network().then((rsp) => {
 		    var data = JSON.parse(rsp);
@@ -86,20 +92,16 @@ class TourWayfindingElement extends HTMLElement {
     
     fetch_network_api() {
 
-	var url = this.api_endpoint + "/network/";
 	var _self = this;
 
 	return new Promise((resolve, reject) => {
 	    
-	    if (_self.network){
-		resolve();
-		return;
-	    }
-
 	    if (! _self.api_endpoint){
 		reject();
 		return;
 	    }
+
+	    var url = this.api_endpoint + "/network/";
 	    
 	    fetch(url).then(rsp =>
 		rsp.json()
@@ -143,13 +145,20 @@ class TourWayfindingElement extends HTMLElement {
 
     steps_between_api(from_waypoint, to_waypoint) {
 
+	var _self = this;
+	
 	return new Promise((resolve, reject) => {
 
+	    if (! _self.api_endpoint){
+		reject();
+		return;
+	    }
+	    
 	    var params = new URLSearchParams();
 	    params.set("from", from_waypoint);
 	    params.set("to", to_waypoint);
 	    
-	    var url = this.api_endpoint + "/route/?" + params.toString();
+	    var url = _self.api_endpoint + "/route/?" + params.toString();
 
 	    fetch(url).then(rsp =>
 		rsp.json()
@@ -163,8 +172,15 @@ class TourWayfindingElement extends HTMLElement {
 
     steps_between_wasm(from_waypoint, to_waypoint) {
 
+	var _self = this;
+	
 	return new Promise((resolve, reject) => {
 
+	    if (! _self.wasm_endpoint){
+		reject();
+		return;
+	    }
+	    
 	    sfomuseum_route(from_waypoint, to_waypoint).then((rsp) => {
 		var steps = JSON.parse(rsp);
 		resolve(steps);

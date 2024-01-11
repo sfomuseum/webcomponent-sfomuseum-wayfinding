@@ -13,6 +13,7 @@ dist-tour-js:
 		lib/leaflet-arrowheads.js \
 		lib/protomaps.js \
 		lib/protomaps-leaflet.min.js \
+		lib/wasm_exec.js \
 		lib/sfomuseum.*.js \
 		src/sfomuseum.wayfinding.tour.js
 
