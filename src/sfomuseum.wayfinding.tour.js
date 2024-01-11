@@ -37,27 +37,34 @@ class TourWayfindingElement extends HTMLElement {
 	*/
     }
 
+    populate_network(data) {
+
+	this.network = {};
+	
+	var features = data.features;
+	var count = features.length;
+	
+	for (var i=0; i < count; i++){		    
+	    var f = features[i];
+	    var props = f.properties;
+	    var id  = props.id;
+	    this.network[id] = props;
+	}
+	
+    }
+    
     fetch_network_wasm() {
 
+	var _self = this;
+	
 	return new Promise((resolve, reject) => {
 	    
 	    sfomuseum.wasm.fetch("../lib/sfomuseum_route.wasm").then((rsp) => {
 		
-		sfomuseum_waypoints().then((rsp) => {
-		    
-		    var waypoints = JSON.parse(rsp);
-		    var count = waypoints.length;
-		    
-		    this.network = {};
-		    
-		    for (var i=0; i < count; i++){		    
-			var wp = waypoints[i];
-			var id  = wp.id;
-			this.network[id] = wp;
-		    }
-		    
+		sfomuseum_network().then((rsp) => {
+		    var data = JSON.parse(rsp);
+		    _self.populate_network(data);		    
 		    resolve();
-		    
 		});
 		
 	    }).catch((err) => {
@@ -88,18 +95,7 @@ class TourWayfindingElement extends HTMLElement {
 		rsp.json()
 	    ).then(data => {
 		
-		this.network = {};
-		
-		var features = data.features;
-		var count = features.length;
-		
-		for (var i=0; i < count; i++){		    
-		    var f = features[i];
-		    var props = f.properties;
-		    var id  = props.id;
-		    this.network[id] = props;
-		}
-		
+		_self.populate_network(data);
 		resolve();
 		
 	    }).catch(err => {
