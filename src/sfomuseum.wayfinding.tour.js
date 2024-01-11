@@ -24,9 +24,8 @@ class TourWayfindingElement extends HTMLElement {
 	    var u = new URL(endpoint);
 	    
 	    if (u.protocol == "wasm:"){
-		var path = u.pathname;
-		path = path.replace("///", "");
-		this.wasm_endpoint = path;
+		var q = u.searchParams;
+		this.wasm_endpoint = q.get("uri");
 	    } else {
 		this.api_endpoint = endpoint;
 	    }
