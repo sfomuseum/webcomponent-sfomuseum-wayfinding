@@ -18,6 +18,86 @@ sfomuseum.wayfinding.route = (function(){
 	    return steps_layergroup.getLayer(layer_id);
 	},
 
+	foo: function(map, steps){
+
+	    var count_steps = steps.length;
+	    
+	    var first_geom = steps[0].geometry;
+            var last_geom = steps[count_steps - 1].geometry;
+
+            var first_pt = [ first_geom.coordinates[1], first_geom.coordinates[0] ];
+            var last_pt = [ last_geom.coordinates[1], last_geom.coordinates[0] ];
+
+            var dist_m = map.distance(first_pt, last_pt);
+            var walk_time = dist_m / 25;        // meters per minute, this number is a ballpark
+
+            dist_km = dist_m / 1000;
+            dist_ml = dist_km * 0.621;
+
+	    var includes_airtrain = false;
+	    var exits_post_security = false;
+	    var enters_post_security = false;
+
+	    var was_post_security;
+	    
+	    for (var i=0; i < count_steps; i++){
+
+		var st = steps[i];
+		
+		if (st.is_airtrain){
+		    includes_airtrain = true;
+		}
+
+		if (i > 0){
+
+		    if ((was_post_security) && (! st.is_post_security)){
+			exits_post_security = true;
+		    }
+
+		    if ((! was_post_security) && (st.is_post_security)){
+			enters_post_security = true;
+		    }
+		}
+		
+		was_post_security = st.is_post_security;
+	    }
+	    
+	    var rsp = {
+		distance: {
+		    kilometers: dist_km,
+		    miles: dist_ml,
+		},
+		walk_time: walk_time,
+		airtrain: includes_airtrain,
+		exits_post_security: exits_post_security,
+		enters_post_security: enters_post_security,		
+	    };
+
+	    return rsp;
+	},
+
+	foo_string: function(map, steps) {
+
+	    var rsp = self.foo(map, steps);
+	    var dist = rsp.distance;
+	    
+	    var str = "The distance between these two points is " + dist.miles.toFixed(2) + " miles (" + dist.kilometers.toFixed(2) + " km) which takes approximately " + Math.ceil(rsp.walk_time) + " to walk.";
+
+	    if (rsp.airtrain){
+		str += " This route includes distance travelled on the AirTrain so you should factor in some extra time for the train to arrive at the station.";
+	    }
+
+	    if (rsp.enters_post_security){
+		str += " This route requires going through security so you should factor in extra time to do that.";
+	    }
+
+	    if (rsp.exits_post_security){
+		str += " This route exits the post security area so you should factor in extra time to re-enter the secure area if necessary.";
+	    }
+
+	    return str;
+	},
+	
 	draw_route: function(map, steps, args){
 
 	    self.clear_geometries(map);

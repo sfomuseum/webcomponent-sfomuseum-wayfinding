@@ -131,7 +131,7 @@ class TourWayfindingElement extends HTMLElement {
 	    var map_id = "map-" + from_waypoint + "-" + to_waypoint;
 	    
 	    var map_el = document.createElement("div");
-	    map_el.setAttribute("class", "map");
+	    map_el.setAttribute("class", "wayfinding-map");
 	    map_el.setAttribute("id", map_id);
 	    map_el.setAttribute("data-map-provider", "protomaps");
 	    map_el.setAttribute("data-protomaps-tile-url", "https://static.sfomuseum.org/pmtiles/sfomuseum_v3/{z}/{x}/{y}.mvt?key=");
@@ -140,9 +140,23 @@ class TourWayfindingElement extends HTMLElement {
 		map_el.setAttribute("style", _self.getAttribute("map-style"));
 	    }
 	    
-	    root.appendChild(map_el);
+	    var caption_el = document.createElement("div");
+	    caption_el.setAttribute("class", "wayfinding-map-caption");
+	    
+	    var wrapper = document.createElement("div");
+	    wrapper.setAttribute("class", "wayfinding-map-wrapper");
+	    
+	    wrapper.appendChild(map_el);
+	    wrapper.appendChild(caption_el);
 
-	    _self.draw_map(map_el, steps);
+	    root.appendChild(wrapper);
+
+	    var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
+	    var caption = sfomuseum.wayfinding.route.foo_string(map, steps);
+
+	    caption_el.appendChild(document.createTextNode(caption));
+	    
+	    _self.draw_map(map, steps);
 	    
 	}).catch(err => {
 	    console.log("Failed to complete routing", err);
@@ -150,9 +164,7 @@ class TourWayfindingElement extends HTMLElement {
 	
     }
 
-    draw_map(map_el, steps){
-
-	var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
+    draw_map(map, steps){
 	
 	var bounds = sfomuseum.maps.campus.campusBounds();	
 	map.fitBounds(bounds);
