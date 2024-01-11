@@ -3,6 +3,7 @@ class TourWayfindingElement extends HTMLElement {
     // See also: https://tmp.larlet.fr/leaflet-map/
 
     api_endpoint = null // "http://localhost:8080/wayfinding/api"
+    wasm_endpoint = null
     
     network = null
     
@@ -18,39 +19,49 @@ class TourWayfindingElement extends HTMLElement {
     connectedCallback() {
 
 	if (this.hasAttribute("api-endpoint")){
-	    this.api_endpoint = this.getAttribute("api-endpoint");
+
+	    var endpoint = this.getAttribute("api-endpoint")
+	    var u = new URL(endpoint);
+	    
+	    if (u.protocol == "wasm:"){
+		var path = u.pathname;
+		path = path.replace("///", "");
+		this.wasm_endpoint = path;
+	    } else {
+		this.api_endpoint = endpoint;
+	    }
 	}
 
-	this.fetch_network_wasm().then(rsp => {
-	    console.log("WASM OKAY");
+	this.fetch_network().then(rsp => {
 	    this.route();	    
 	}).catch((err) => {
-	    console.log("WASM SAD", err);
+	    console.log("SAD", err);
 	});
-
-	/*
-	this.fetch_network().then(rsp => {
-	    this.route();
-	}).catch((err) => {
-	    console.log("Failed to load network", err)
-	});
-	*/
     }
 
-    populate_network(data) {
+    fetch_network(){
 
-	this.network = {};
+	var _self = this;
 	
-	var features = data.features;
-	var count = features.length;
+	return new Promise((resolve, rejext) => {
 	
-	for (var i=0; i < count; i++){		    
-	    var f = features[i];
-	    var props = f.properties;
-	    var id  = props.id;
-	    this.network[id] = props;
-	}
-	
+	    if (_self.wasm_endpoint){
+
+		_self.fetch_network_wasm().then(rsp => {
+		    resolve();
+		}).catch(err => {
+		    reject(err);
+		});
+
+		return;
+	    }
+	    
+	    _self.fetch_network_api().then(rsp => {
+		resolve();
+	    }).catch(err => {
+		rejext(err);
+	    })
+	});
     }
     
     fetch_network_wasm() {
@@ -74,7 +85,7 @@ class TourWayfindingElement extends HTMLElement {
 	
     }
     
-    fetch_network() {
+    fetch_network_api() {
 
 	var url = this.api_endpoint + "/network/";
 	var _self = this;
@@ -104,7 +115,83 @@ class TourWayfindingElement extends HTMLElement {
 	    
 	});
     }
-    
+
+    steps_between(from_waypoint, to_waypoint) {
+
+	var _self = this;
+
+	return new Promise((resolve, reject) => {
+
+	    if (_self.wasm_endpoint){
+
+		_self.steps_between_wasm(from_waypoint, to_waypoint).then((rsp) => {
+		    resolve(rsp);
+		}).catch((err) => {
+		    reject(err);
+		});
+
+		return;
+	    }
+
+	    _self.steps_between_api(from_waypoint, to_waypoint).then((rsp) => {
+		resolve(rsp);
+	    }).catch((err) => {
+		reject(err);
+	    });
+	    
+	});
+    }
+
+    steps_between_api(from_waypoint, to_waypoint) {
+
+	return new Promise((resolve, reject) => {
+
+	    var params = new URLSearchParams();
+	    params.set("from", from_waypoint);
+	    params.set("to", to_waypoint);
+	    
+	    var url = this.api_endpoint + "/route/?" + params.toString();
+
+	    fetch(url).then(rsp =>
+		rsp.json()
+	    ).then(steps => {
+		resolve(steps);
+	    }).catch((err) => {
+		reject(err);
+	    });
+	});
+    }
+
+    steps_between_wasm(from_waypoint, to_waypoint) {
+
+	return new Promise((resolve, reject) => {
+
+	    sfomuseum_route(from_waypoint, to_waypoint).then((rsp) => {
+		var steps = JSON.parse(rsp);
+		resolve(steps);
+	    }).catch((err) => {
+		reject(err);
+	    });
+	});
+	
+    }
+
+    populate_network(data) {
+
+	this.network = {};
+	
+	var features = data.features;
+	var count = features.length;
+	
+	for (var i=0; i < count; i++){		    
+	    var f = features[i];
+	    var props = f.properties;
+	    var id  = props.id;
+	    this.network[id] = props;
+	}
+	
+    }
+
     route(){
 			      
 	const shadow = this.attachShadow({ mode: "open" });
@@ -143,7 +230,7 @@ class TourWayfindingElement extends HTMLElement {
 	
 	var _self = this;
 	
-	this.steps_between_wasm(from_waypoint, to_waypoint).then(steps => {
+	this.steps_between(from_waypoint, to_waypoint).then(steps => {
 	    
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
@@ -209,41 +296,6 @@ class TourWayfindingElement extends HTMLElement {
 	};
 
 	sfomuseum.wayfinding.route.draw_route(map, steps, steps_args);
-    }
-
-    steps_between(from_waypoint, to_waypoint) {
-
-	return new Promise((resolve, reject) => {
-
-	    var params = new URLSearchParams();
-	    params.set("from", from_waypoint);
-	    params.set("to", to_waypoint);
-	    
-	    var url = this.api_endpoint + "/route/?" + params.toString();
-
-	    fetch(url).then(rsp =>
-		rsp.json()
-	    ).then(steps => {
-		resolve(steps);
-	    }).catch((err) => {
-		reject(err);
-	    });
-	});
-    }
-
-    steps_between_wasm(from_waypoint, to_waypoint) {
-
-	return new Promise((resolve, reject) => {
-
-	    sfomuseum_route(from_waypoint, to_waypoint).then((rsp) => {
-		var steps = JSON.parse(rsp);
-		console.log("WASM", steps);
-		resolve(steps);
-	    }).catch((err) => {
-		reject(err);
-	    });
-	});
-	
     }
     
 }
