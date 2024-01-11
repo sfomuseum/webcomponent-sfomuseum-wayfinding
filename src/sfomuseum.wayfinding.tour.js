@@ -152,7 +152,7 @@ class TourWayfindingElement extends HTMLElement {
 	    root.appendChild(wrapper);
 
 	    var map = sfomuseum.wayfinding.maps.getMap(map_el, {});
-	    var caption = sfomuseum.wayfinding.route.foo_string(map, steps);
+	    var caption = sfomuseum.wayfinding.route.caption(map, steps);
 
 	    caption_el.appendChild(document.createTextNode(caption));
 	    

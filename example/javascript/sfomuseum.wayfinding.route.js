@@ -18,7 +18,7 @@ sfomuseum.wayfinding.route = (function(){
 	    return steps_layergroup.getLayer(layer_id);
 	},
 
-	foo: function(map, steps){
+	stats: function(map, steps){
 
 	    var count_steps = steps.length;
 	    
@@ -76,15 +76,22 @@ sfomuseum.wayfinding.route = (function(){
 	    return rsp;
 	},
 
-	foo_string: function(map, steps) {
+	caption: function(map, steps) {
 
-	    var rsp = self.foo(map, steps);
+	    var count_steps = steps.length;
+	    
+	    var first_step = steps[0];
+            var last_step = steps[count_steps - 1];
+	    
+	    var rsp = self.stats(map, steps);
 	    var dist = rsp.distance;
 	    
-	    var str = "The distance between these two points is " + dist.miles.toFixed(2) + " miles (" + dist.kilometers.toFixed(2) + " km) which takes approximately " + Math.ceil(rsp.walk_time) + " to walk.";
+	    var str = "The distance between " + first_step.name + " and " + last_step.name + " is " +
+		      dist.miles.toFixed(2) + " miles (" + dist.kilometers.toFixed(2) +
+		      " km) which takes approximately " + Math.ceil(rsp.walk_time) + " minutes to walk.";
 
 	    if (rsp.airtrain){
-		str += " This route includes distance travelled on the AirTrain so you should factor in some extra time for the train to arrive at the station.";
+		str += " This route includes distance travelled on the AirTrain so it will probably be faster than that but you should account for the time it will take for the train to arrive.";
 	    }
 
 	    if (rsp.enters_post_security){
