@@ -1,13 +1,15 @@
 class TourWayfindingElement extends HTMLElement {
 
     // See also: https://tmp.larlet.fr/leaflet-map/
+
+    api_endpoint = null // "http://localhost:8080/wayfinding/api"
     
     network = null
     
     constructor() {
 	
 	super();
-	
+
 	this.fetch_network().catch((err) => {
 	    console.log("Failed to load network", err)
 	});
@@ -15,6 +17,10 @@ class TourWayfindingElement extends HTMLElement {
     
     connectedCallback() {
 
+	if (this.hasAttribute("api-endpoint")){
+	    this.api_endpoint = this.getAttribute("api-endpoint");
+	}
+	
 	this.fetch_network().then(rsp => {
 	    this.route();
 	}).catch((err) => {
@@ -24,16 +30,21 @@ class TourWayfindingElement extends HTMLElement {
 
     fetch_network() {
 
-	var url = "http://localhost:8080/wayfinding/api/network/";
+	var url = this.api_endpoint + "/network/";
 	var _self = this;
-	
-	return new Promise((resolve, reject) => {
 
+	return new Promise((resolve, reject) => {
+	    
 	    if (_self.network){
 		resolve();
 		return;
 	    }
 
+	    if (! _self.api_endpoint){
+		reject();
+		return;
+	    }
+	    
 	    fetch(url).then(rsp =>
 		rsp.json()
 	    ).then(data => {
@@ -99,21 +110,13 @@ class TourWayfindingElement extends HTMLElement {
 	params.set("from", from_waypoint);
 	params.set("to", to_waypoint);
 	
-	var url = "http://localhost:8080/wayfinding/api/route/?" + params.toString();
+	var url = this.api_endpoint + "/route/?" + params.toString();
 
 	var _self = this;
 	
 	fetch(url).then(rsp =>
 	    rsp.json()
 	).then(steps => {
-
-	    var map_id = "map-" + from_waypoint + "-" + to_waypoint;
-	    
-	    var map_el = document.createElement("div");
-	    map_el.setAttribute("class", "map");
-	    map_el.setAttribute("id", map_id);
-	    map_el.setAttribute("data-map-provider", "protomaps");
-	    map_el.setAttribute("data-protomaps-tile-url", "https://static.sfomuseum.org/pmtiles/sfomuseum_v3/{z}/{x}/{y}.mvt?key=");
 	    
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
@@ -123,6 +126,18 @@ class TourWayfindingElement extends HTMLElement {
 	    if (tpl){
 		let tpl_content = tpl.content;
 		root.appendChild(tpl_content.cloneNode(true));
+	    }
+
+	    var map_id = "map-" + from_waypoint + "-" + to_waypoint;
+	    
+	    var map_el = document.createElement("div");
+	    map_el.setAttribute("class", "map");
+	    map_el.setAttribute("id", map_id);
+	    map_el.setAttribute("data-map-provider", "protomaps");
+	    map_el.setAttribute("data-protomaps-tile-url", "https://static.sfomuseum.org/pmtiles/sfomuseum_v3/{z}/{x}/{y}.mvt?key=");
+
+	    if (_self.hasAttribute("map-style")){
+		map_el.setAttribute("style", _self.getAttribute("map-style"));
 	    }
 	    
 	    root.appendChild(map_el);
@@ -141,19 +156,19 @@ class TourWayfindingElement extends HTMLElement {
 	
 	var bounds = sfomuseum.maps.campus.campusBounds();	
 	map.fitBounds(bounds);
-
+	
 	if (this.hasAttribute("disable-scroll")){
 	    map.scrollWheelZoom.disable();
 	}
 
 	var no_popups = this.hasAttribute("disable-popups");
 	var with_arrowheads = this.hasAttribute("arrowheads");
-
+	
 	var steps_args = {
 	    no_popups: no_popups,
 	    arrowheads: with_arrowheads,
 	};
-	
+
 	sfomuseum.wayfinding.route.draw_route(map, steps, steps_args);
     }
     

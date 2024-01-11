@@ -19,13 +19,9 @@
 	
 	<p>Before</p>
 	
-	<sfomuseum-tour-wayfinding from="1796982269" to="1745903711" disable-scroll arrowheads></sfomuseum-tour-wayfinding>
+	<sfomuseum-tour-wayfinding from="1796982269" to="1745903711" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-tour-wayfinding>
 
-	<p>In between</p>
-	
-	<sfomuseum-tour-wayfinding from="1796982269" to="1763588451" disable-scroll arrowheads></sfomuseum-tour-wayfinding>	
-
-	<sfomuseum-tour-wayfinding from="1796889497" to="1763594985" disable-scroll arrowheads></sfomuseum-tour-wayfinding>
+	<sfomuseum-tour-wayfinding from="1796889497" to="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-tour-wayfinding>
 	
 	<p>After</p>
     </body>
@@ -43,6 +39,6 @@
     <script type="text/javascript" src="javascript/sfomuseum.wayfinding.route.js"></script>
     <!-- END OF please to bundle me in to a thing... -->
     
-    <script type="text/javascript" src="../src/sfomuseum.wayfinding.tour.js"></script>
+    <script type="text/javascript" src="../src/sfomuseum.wayfinding.tour.js" type="module"></script>
 
 </html>
