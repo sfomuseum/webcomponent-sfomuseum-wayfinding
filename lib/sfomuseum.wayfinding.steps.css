@@ -1,0 +1,89 @@
+/* Tags */
+
+
+/* Identifiers */
+
+#steps {
+	padding-left: 0px !important;
+}
+
+#steps-maps-wrapper {
+	width:90%;
+}
+	
+/* Classes */
+
+#steps-maps-wrapper li {
+	list-style-type:none;
+}
+	
+
+#steps-list:before {
+	content: "Approximate walk time: " attr(data-walk-time) " minutes (" attr(data-distance-ml) " miles / " attr(data-distance-km) " km).";
+	display:block;
+	margin-bottom:.5rem;
+	font-size: small;
+}
+
+#steps-show-dialog-count:after {
+	content: " Approximate walk time: " attr(data-walk-time) " minutes (" attr(data-distance-ml) " miles / " attr(data-distance-km) " km).";
+}
+
+#steps-maps-wrapper li {
+	list-style-type:none;
+	font-weight: 600;
+	margin-bottom:.2rem;
+}
+
+#steps-maps-wrapper li:nth-child(n) .label-step:before {
+	content: "Continue to ";
+	font-weight: initial;
+}
+
+/*
+#steps-maps-wrapper li:nth-child(n) .label-step:after {
+	content: ', then 'attr(data-bearing) ' (' attr(data-bearing-n) ')'; 
+	font-weight: initial;
+}
+
+#steps-maps-wrapper li:first-child .label-step:after {
+	content: ', ' attr(data-bearing) ' (' attr(data-bearing-n) ')'; 
+	font-weight: initial;
+}
+ */
+
+#steps-maps-wrapper li:first-child .label-step:before {
+	content: "Starting from ";
+	font-weight: initial;		
+}
+
+#steps-maps-wrapper li:last-child .label-step:after {
+	content: "";
+	font-weight: initial;			
+}
+
+.label-step {
+	font-weight:600;
+	font-size: small;
+	display:inline-block;
+}
+
+.steps-map {
+	height: 270px;
+	width: 100%;
+	border:solid thin;
+	margin-bottom:1rem;
+	margin-top:.5rem;
+}
+
+.leaflet-popup-content-wrapper {
+	opacity: .9;
+	font-weight: 700;
+	color: darkblue;
+}
+
+/* Media queries */
+
+@media (max-width: 1000px) {
+	
+}

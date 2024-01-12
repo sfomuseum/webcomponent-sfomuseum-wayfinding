@@ -17,3 +17,8 @@ sfomuseum-wayfinding {
 .sfomuseum-wayfinding {
 
 }
+
+.steps-map {
+	height: 250px !important;
+	border: solid thick;
+}

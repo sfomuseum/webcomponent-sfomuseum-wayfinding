@@ -11,7 +11,8 @@
 
 	<template id="sfomuseum-wayfinding-map-template">
 	    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css" />
-	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.leaflet.css" />	    
+	    <link rel="stylesheet" type="text/css" href="../lib/sfomuseum.wayfinding.steps.css" />	    	    
+	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.leaflet.css" />
 	    <style type="text/css">
 	     .wayfinding-map-wrapper {
 		     width: 95%;
@@ -33,21 +34,23 @@
 	</template>
 	
 	<div id="routes">
-		<sfomuseum-wayfinding-chooser destination="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-chooser>
+		<sfomuseum-wayfinding-chooser destination="1763594985" show-steps disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-chooser>
 	</div>
 
     </body>
 
     <script type="text/javascript" src="../lib/leaflet.js"></script>
-    <script type="text/javascript" src="../lib/protomaps.js"></script>
     <script type="text/javascript" src="../lib/leaflet-arrowheads.js"></script>
     <script type="text/javascript" src="../lib/leaflet.geometryutil.js"></script>
+    <script type="text/javascript" src="../lib/protomaps.js"></script>    
     <script type="text/javascript" src="../lib/protomaps-leaflet.min.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.maps.campus.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.maps.data.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.maps.protomaps.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.wayfinding.maps.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.wayfinding.route.js"></script>
+    <script type="text/javascript" src="../lib/sfomuseum.wayfinding.steps.js"></script>
+    <script type="text/javascript" src="../lib/sfomuseum.wayfinding.extensions.js"></script>        
     <script type="text/javascript" src="../lib/sfomuseum.wasm.js"></script>
     <script type="text/javascript" src="../lib/wasm_exec.js"></script>    
     

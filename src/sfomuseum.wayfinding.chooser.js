@@ -131,6 +131,10 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    if (_self.hasAttribute("disable-scroll")){
 		map_el.setAttribute("disable-scroll", "true");
 	    }
+
+	    if (_self.hasAttribute("show-steps")){
+		map_el.setAttribute("show-steps", "true");
+	    }
 	    
 	    var root = _self.shadowRoot;
 

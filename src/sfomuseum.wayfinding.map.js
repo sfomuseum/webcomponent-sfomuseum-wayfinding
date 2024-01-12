@@ -278,38 +278,12 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 	    
 	    var caption_el = document.createElement("div");
 	    caption_el.setAttribute("class", "wayfinding-map-caption");
-	    
+
 	    var wrapper = document.createElement("div");
 	    wrapper.setAttribute("class", "wayfinding-map-wrapper");
 	    
 	    wrapper.appendChild(map_el);
 	    wrapper.appendChild(caption_el);
-
-	    var dialog_el = document.createElement("dialog");
-	    dialog_el.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog");
-
-	    var form = document.createElement("form");
-	    form.setAttribute("method", "dialog");
-	    
-	    var steps_div = document.createElement("div");
-	    steps_div.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-steps");
-	
-	    var close_div = document.createElement("div");
-	    close_div.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-close");
-
-	    var close_btn = document.createElement("input");
-	    close_btn.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-close-button");
-	    
-	    close_btn.setAttribute("type", "submit");
-	    close_btn.setAttribute("value", "X");
-	    
-	    close_div.appendChild(close_btn);
-	    
-	    form.appendChild(steps_div);	
-	    form.appendChild(close_div);
-	    
-	    dialog_el.appendChild(form);	    
-	    wrapper.appendChild(dialog_el);	    
 	    
 	    root.appendChild(wrapper);
 
@@ -318,20 +292,54 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 
 	    caption_el.appendChild(document.createTextNode(caption));
 
-	    var steps_el = document.createElement("a");
-	    steps_el.setAttribute("href", "#");
-	    steps_el.appendChild(document.createTextNode(" Show steps"));
+	    if (_self.hasAttribute("show-steps")){
 
-	    steps_el.onclick = function(){
-
-		steps_div.innerHTML = "";
-
-		steps_div.appendChild(document.createTextNode("HI"));
-		dialog_el.showModal();
-		return false;
-	    };
-	    
-	    caption_el.appendChild(steps_el);	    
+		var dialog_el = document.createElement("dialog");
+		dialog_el.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog");
+		
+		var form = document.createElement("form");
+		form.setAttribute("method", "dialog");
+		
+		var steps_div = document.createElement("div");
+		steps_div.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-steps");
+		
+		var close_div = document.createElement("div");
+		close_div.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-close");
+		
+		var close_btn = document.createElement("input");
+		close_btn.setAttribute("id", "sfomuseum-wayfinding-map-steps-dialog-close-button");
+		
+		close_btn.setAttribute("type", "submit");
+		close_btn.setAttribute("value", "X");
+		
+		close_div.appendChild(close_btn);
+		
+		form.appendChild(steps_div);	
+		form.appendChild(close_div);
+		
+		dialog_el.appendChild(form);	    
+		wrapper.appendChild(dialog_el);	    
+		
+		var steps_el = document.createElement("a");
+		steps_el.setAttribute("href", "#");
+		steps_el.appendChild(document.createTextNode(" Show steps"));
+		
+		steps_el.onclick = function(){
+		    
+		    steps_div.innerHTML = "";
+		    
+		    var steps_list = sfomuseum.wayfinding.steps.render_steps(map, steps);
+		    steps_div.appendChild(steps_list);
+		    
+		    var map_els = steps_list.getElementsByClassName("steps-map");
+		    sfomuseum.wayfinding.steps.render_maps(steps, map_els);
+		    
+		    dialog_el.showModal();
+		    return false;
+		};
+		
+		caption_el.appendChild(steps_el);	    
+	    }
 	    
 	    _self.draw_map(map, steps);
 	    
