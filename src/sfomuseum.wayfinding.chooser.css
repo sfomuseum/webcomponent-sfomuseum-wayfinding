@@ -1,0 +1,39 @@
+select {
+	border-radius: 0px;
+	border: none;
+	border-bottom: solid thin;
+	background-color: transparent;
+	font-size:.933rem;
+	font-family: cartogothic,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+	color: #5d5d5d;
+}
+
+button {
+	border-radius:0px;
+	border:none;
+	background-color: transparent;
+	margin-left:.5rem;
+}
+
+input[type=submit] {
+	color: #8a741d;
+	border: solid 1px #8a741d;
+	border-radius: 80px;
+	background-color: transparent;
+	width: 25px;
+	height: 25px;
+	font-weight: 700;
+}
+
+#sfomuseum-wayfinding-chooser-dialog {
+	height: 90vw;
+	width: 100vw;
+	border: solid 5px #8a741d;
+}
+
+#sfomuseum-wayfinding-choose-dialog-close {
+	display:grid;
+	justify-content:right;
+	margin-bottom:1rem;
+	width: 99vw;
+}

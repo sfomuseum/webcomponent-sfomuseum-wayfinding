@@ -1,4 +1,4 @@
-class TourWayfindingElement extends HTMLElement {
+class SFOMuseumWayfindingMapElement extends HTMLElement {
 
     // See also: https://tmp.larlet.fr/leaflet-map/
 
@@ -249,8 +249,14 @@ class TourWayfindingElement extends HTMLElement {
 	    
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
+
+	    var tpl_id = "sfomuseum-map-wayfinding-template";
+
+	    if (root.hasAttribute("template-id")){
+		tpl_id = root.getAttribute("template-id");
+	    }
 	    
-	    var tpl = document.getElementById("sfomuseum-tour-wayfinding-template");
+	    var tpl = document.getElementById(tpl_id);
 
 	    if (tpl){
 		let tpl_content = tpl.content;
@@ -315,4 +321,4 @@ class TourWayfindingElement extends HTMLElement {
     
 }
 
-customElements.define('sfomuseum-tour-wayfinding', TourWayfindingElement);
+customElements.define('sfomuseum-wayfinding-map', SFOMuseumWayfindingMapElement);

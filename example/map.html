@@ -1,0 +1,39 @@
+<html>
+    <head>
+	<title>SFO Museum Wayfinding Web Component Example</title>
+	<link rel="stylesheet" type="text/css" href="map.css" />
+    </head>
+    <body>
+	
+	<template id="sfomuseum-wayfinding-map-template">
+	    <link rel="stylesheet" type="text/css" href="../dist/sfomuseum.wayfinding.map.webcomponent.css" />
+	    <style type="text/css">
+	     .wayfinding-map-wrapper {
+		     width: 100%;
+		     margin:1rem;
+	     }
+	     .wayfinding-map {
+		     height: 300px;
+		     width: 100%;		     
+		     border:solid thin;
+	     }
+	     
+	     .wayfinding-map-caption {
+		     font-size:small;
+		     margin-top: .5rem;
+		     line-height: 1.1rem;
+	     }
+	    </style>
+	</template>
+	
+	<div id="routes">
+		<sfomuseum-wayfinding-map from="1796982269" to="1745903711" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796889497" to="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796982281" to="1763588201" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1763588159" to="1729813735" disable-scroll arrowheads api-endpoint="wasm://?uri=../lib/sfomuseum_route.wasm"></sfomuseum-wayfinding-map>
+	</div>
+	
+    </body>
+
+    <script type="text/javascript" src="../dist/sfomuseum.wayfinding.map.webcomponent.js" type="module"></script>    
+</html>

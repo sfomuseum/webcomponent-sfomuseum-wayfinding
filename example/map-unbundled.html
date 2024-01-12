@@ -1,11 +1,11 @@
 <html>
     <head>
 	<title>SFO Museum Wayfinding Web Component Example</title>
-	<link rel="stylesheet" type="text/css" href="tour.css" />
+	<link rel="stylesheet" type="text/css" href="map.css" />
     </head>
     <body>
 	
-	<template id="sfomuseum-tour-wayfinding-template">
+	<template id="sfomuseum-wayfinding-map-template">
 	    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css" />
 	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.leaflet.css" />
 	    <style type="text/css">
@@ -28,10 +28,10 @@
 	</template>
 	
 	<div id="routes">
-		<sfomuseum-tour-wayfinding from="1796982269" to="1745903711" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-tour-wayfinding>
-		<sfomuseum-tour-wayfinding from="1796889497" to="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-tour-wayfinding>
-		<sfomuseum-tour-wayfinding from="1796982281" to="1763588201" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-tour-wayfinding>
-		<sfomuseum-tour-wayfinding from="1763588159" to="1729813735" disable-scroll arrowheads api-endpoint="wasm:///?uri=../lib/sfomuseum_route.wasm"></sfomuseum-tour-wayfinding>
+		<sfomuseum-wayfinding-map from="1796982269" to="1745903711" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796889497" to="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796982281" to="1763588201" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1763588159" to="1729813735" disable-scroll arrowheads api-endpoint="wasm:///?uri=../lib/sfomuseum_route.wasm"></sfomuseum-wayfinding-map>
 	</div>
 	
     </body>
@@ -49,5 +49,5 @@
     <script type="text/javascript" src="../lib/sfomuseum.wasm.js"></script>
     <script type="text/javascript" src="../lib/wasm_exec.js"></script>    
     
-    <script type="text/javascript" src="../src/sfomuseum.wayfinding.tour.js"></script>
+    <script type="text/javascript" src="../src/sfomuseum.wayfinding.map.js"></script>
 </html>

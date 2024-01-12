@@ -1,4 +1,4 @@
-class WayfindingElement extends HTMLElement {
+class SFOMuseumWayfindingChooserElement extends HTMLElement {
     
     constructor() {
 	super();	
@@ -47,12 +47,25 @@ class WayfindingElement extends HTMLElement {
 	    return false;
 	}
 
+	var tpl_id = "sfomuseum-map-wayfinding-template";
+	
+	if (shadow.hasAttribute("template-id")){
+	    tpl_id = shadow.getAttribute("template-id");
+	}
+	
+	var tpl = document.getElementById(tpl_id);
+	
+	if (tpl){
+	    let tpl_content = tpl.content;
+	    shadow.appendChild(tpl_content.cloneNode(true));
+	}
+	
 	var candidates = [];
 	var terminals = [];
 	var gates = [];
 	
 	var sel = document.createElement("select");
-	sel.setAttribute("style", "border-radius: 0px; border: none; border-bottom: solid thin; background-color: transparent; font-size:.933rem; font-family: cartogothic,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; color: #5d5d5d;");
+	// sel.setAttribute("style", "border-radius: 0px; border: none; border-bottom: solid thin; background-color: transparent; font-size:.933rem; font-family: cartogothic,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; color: #5d5d5d;");
 
 	for (var id in this.network){
 	    
@@ -90,8 +103,7 @@ class WayfindingElement extends HTMLElement {
 	}
 	
 	var btn = document.createElement("button");
-	btn.setAttribute("style", "border-radius:0px; border:none; background-color: transparent; margin-left:.5rem;");
-	// btn.appendChild(document.createTextNode("route"));
+	// btn.setAttribute("style", "border-radius:0px; border:none; background-color: transparent; margin-left:.5rem;");
 
 	/* https://icons.getbootstrap.com/icons/map/ */
 	btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
@@ -107,37 +119,17 @@ class WayfindingElement extends HTMLElement {
 		return false;
 	    }
 
-	    var params = new URLSearchParams();
-	    params.set("from", from);
-	    params.set("to", destination);
-
-	    var inline = _self.hasAttribute("inline");
-
-	    if (! inline){
-		var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();		
-		window.open(url, "wayfinding");
-	    }
-		
-	    // Something something something wasm all the things (including the JS/markup)...
-
-	    params.set("nc", 1);	// nochrome
-	    var url = "https://millsfield.sfomuseum.org/wayfinding/route/#" + params.toString();		
-
+	    var map_el = document.createElement("sfomuseum-wayfinding-map");
+	    map_el.setAttribute("from", from);
+	    map_el.setAttribute("to", destination);	    
+	    
 	    var root = _self.shadowRoot;
 
-	    var dialog = root.getElementById("sfomuseum-wayfinding-dialog");
-	    var iframe = root.getElementById("sfomuseum-wayfinding-dialog-iframe");
-
-	    iframe.onload = function(e){
- 		dialog.showModal();
-	    };
-
-	    iframe.onerror = function(err){
-		console.log("Failed to load iframe", url, err);
-		alert("Oh no! There was a problem loading that route.");
-	    };
+	    var map_div = root.getElementById("sfomuseum-wayfinding-dialog-map");
+	    map_div.appendChild(map_el);
 	    
-	    iframe.src = url;
+	    var dialog = root.getElementById("sfomuseum-wayfinding-dialog");
+	    dialog.showModal();
 	    return false;
 	}
 	
@@ -147,32 +139,30 @@ class WayfindingElement extends HTMLElement {
 	wrapper.appendChild(btn);
 
 	var dialog = document.createElement("dialog");
-	dialog.setAttribute("id", "sfomuseum-wayfinding-dialog");
-	dialog.setAttribute("style", "height: 90vw;width: 100vw;border: solid 5px #8a741d;");
+	dialog.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog");
+	// dialog.setAttribute("style", "height: 90vw;width: 100vw;border: solid 5px #8a741d;");
 
 	var form = document.createElement("form");
 	form.setAttribute("method", "dialog");
 
+	var map_div = document.createElement("div");
+	map_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-map");
+	
 	var close_div = document.createElement("div");
-	close_div.setAttribute("id", "sfomuseum-wayfinding-dialog-close");
-	close_div.setAttribute("style", "display:grid;justify-content: right;margin-bottom:1rem;width: 99vw;");
+	close_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close");
+	// close_div.setAttribute("style", "display:grid;justify-content: right;margin-bottom:1rem;width: 99vw;");
 
 	var close_btn = document.createElement("input");
 	close_btn.setAttribute("type", "submit");
-	// close_btn.setAttribute("class", "btn");
-	close_btn.setAttribute("style", "color: #8a741d; border: solid 1px #8a741d; border-radius: 80px; background-color: transparent; width: 25px; height: 25px; font-weight: 700;");
+	// close_btn.setAttribute("style", "color: #8a741d; border: solid 1px #8a741d; border-radius: 80px; background-color: transparent; width: 25px; height: 25px; font-weight: 700;");
 	close_btn.setAttribute("value", "X");
 
 	close_div.appendChild(close_btn);
+
+	form.appendChild(map_div);	
 	form.appendChild(close_div);
 
-	var iframe = document.createElement("iframe");
-	iframe.setAttribute("id", "sfomuseum-wayfinding-dialog-iframe");
-	iframe.setAttribute("style", "height: 90vw; width: 100vw;margin:0 auto;display:grid;");
-
-	form.appendChild(iframe);
 	dialog.appendChild(form);
-
 	wrapper.appendChild(dialog);
 
 	shadow.appendChild(wrapper);
@@ -231,4 +221,4 @@ class WayfindingElement extends HTMLElement {
     }
 }
 
-customElements.define('sfomuseum-wayfinding', WayfindingElement);
+customElements.define('sfomuseum-wayfinding-chooser', SFOMuseumWayfindingChooserElement);

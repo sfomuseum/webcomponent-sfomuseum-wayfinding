@@ -1,13 +1,13 @@
 # https://github.com/tdewolff/minify
 MINIFY=minify
 
-dist-tour:
-	@make dist-tour-js
-	@make dist-tour-css
+bundle:
+	@make bundle-js
+	@make bundle-css
 
-dist-tour-js:
+bundle-js:
 	$(MINIFY) -b \
-		-o dist/sfomuseum.wayfinding.tour.webcomponent.js \
+		-o dist/sfomuseum.wayfinding.webcomponent.bundle.js \
 		lib/leaflet.js \
 		lib/leaflet.geometryutil.js \
 		lib/leaflet-arrowheads.js \
@@ -15,10 +15,11 @@ dist-tour-js:
 		lib/protomaps-leaflet.min.js \
 		lib/wasm_exec.js \
 		lib/sfomuseum.*.js \
-		src/sfomuseum.wayfinding.tour.js
+		src/sfomuseum.wayfinding.chooser.js
+		src/sfomuseum.wayfinding.map.js
 
-dist-tour-css:
+bundle-css:
 	$(MINIFY) -b \
-		-o dist/sfomuseum.wayfinding.tour.webcomponent.css \
+		-o dist/sfomuseum.wayfinding.webcomponent.bundle.css \
 		lib/leaflet.css \
 		src/sfomuseum.wayfinding.leaflet.css
