@@ -252,9 +252,11 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
     
     load_network(){
 
-	if (this.wasm_endpoint){
-	    return this.load_network_wasm();
-	}
+	/*
+	   if (this.wasm_endpoint){
+	   return this.load_network_wasm();
+	   }
+	 */
 	
 	return new Promise((resolve, reject) => {
 
