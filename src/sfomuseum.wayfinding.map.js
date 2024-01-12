@@ -250,10 +250,10 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 	    var root = _self.shadowRoot;
 	    root.innerHTML = "";
 
-	    var tpl_id = "sfomuseum-map-wayfinding-template";
+	    var tpl_id = "sfomuseum-wayfinding-map-template";
 
-	    if (root.hasAttribute("template-id")){
-		tpl_id = root.getAttribute("template-id");
+	    if (this.hasAttribute("template-id")){
+		tpl_id = this.getAttribute("template-id");
 	    }
 	    
 	    var tpl = document.getElementById(tpl_id);
