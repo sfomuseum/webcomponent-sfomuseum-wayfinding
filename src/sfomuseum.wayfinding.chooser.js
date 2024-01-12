@@ -57,7 +57,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	
 	if (tpl){
 	    let tpl_content = tpl.content;
-	    this.appendChild(tpl_content.cloneNode(true));
+	    shadow.appendChild(tpl_content.cloneNode(true));
 	}
 	
 	var candidates = [];
@@ -65,8 +65,8 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	var gates = [];
 	
 	var sel = document.createElement("select");
-	// sel.setAttribute("style", "border-radius: 0px; border: none; border-bottom: solid thin; background-color: transparent; font-size:.933rem; font-family: cartogothic,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; color: #5d5d5d;");
-
+	sel.setAttribute("id", "sfomuseum-wayfinding-chooser-select");
+	
 	for (var id in this.network){
 	    
 	    if (id == destination){
@@ -103,7 +103,8 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	}
 	
 	var btn = document.createElement("button");
-
+	btn.setAttribute("id", "sfomuseum-wayfinding-chooser-button");
+	
 	/* https://icons.getbootstrap.com/icons/map/ */
 	btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"/>
@@ -134,6 +135,8 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    var root = _self.shadowRoot;
 
 	    var map_div = root.getElementById("sfomuseum-wayfinding-chooser-dialog-map");
+	    map_div.innerHTML = "";
+	    
 	    map_div.appendChild(map_el);
 	    
 	    var dialog = root.getElementById("sfomuseum-wayfinding-chooser-dialog");
@@ -159,6 +162,8 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	close_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close");
 
 	var close_btn = document.createElement("input");
+	close_btn.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close-button");
+	
 	close_btn.setAttribute("type", "submit");
 	close_btn.setAttribute("value", "X");
 

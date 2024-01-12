@@ -1,4 +1,4 @@
-select {
+#sfomuseum-wayfinding-chooser-select {
 	border-radius: 0px;
 	border: none;
 	border-bottom: solid thin;
@@ -8,14 +8,14 @@ select {
 	color: #5d5d5d;
 }
 
-button {
+#sfomuseum-wayfinding-chooser-button {
 	border-radius:0px;
 	border:none;
 	background-color: transparent;
 	margin-left:.5rem;
 }
 
-input[type=submit] {
+#sfomuseum-wayfinding-chooser-dialog-close-button {
 	color: #8a741d;
 	border: solid 1px #8a741d;
 	border-radius: 80px;
@@ -26,14 +26,16 @@ input[type=submit] {
 }
 
 #sfomuseum-wayfinding-chooser-dialog {
-	height: 90vw;
-	width: 100vw;
+	width: 90vw;
 	border: solid 5px #8a741d;
 }
 
-#sfomuseum-wayfinding-choose-dialog-close {
+#sfomuseum-wayfinding-chooser-dialog-close {
 	display:grid;
 	justify-content:right;
 	margin-bottom:1rem;
-	width: 99vw;
+}
+
+#sfomuseum-wayfinding-chooser-dialog-map {
+	margin-top:2rem;
 }
