@@ -332,9 +332,16 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 		    steps_div.appendChild(steps_list);
 		    
 		    var map_els = steps_list.getElementsByClassName("steps-map");
-		    sfomuseum.wayfinding.steps.render_maps(steps, map_els);
+		    var count_els = map_els.length;
+
+		    for (var m=0; m < count_els; m++){
+			map_els[m].setAttribute("style", "height: 270px;border:1px solid red;");
+		    }		   
 		    
 		    dialog_el.showModal();
+
+		    // This needs to happen after the modal dialog is opened
+		    sfomuseum.wayfinding.steps.render_maps(steps, map_els);		    
 		    return false;
 		};
 		

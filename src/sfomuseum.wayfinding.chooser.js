@@ -64,15 +64,11 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    return;
 	}
 
-	console.log("DEST", destination);
-	
 	if (! this.network[destination]){
 	    console.log("Unknown destination point");
 	    return false;
 	}
 
-	console.log("FOO", this.network[destination]);
-	
 	var tpl_id = "sfomuseum-wayfinding-chooser-template";
 	
 	if (this.hasAttribute("template-id")){
