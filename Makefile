@@ -22,4 +22,5 @@ bundle-css:
 	$(MINIFY) -b \
 		-o dist/sfomuseum.wayfinding.webcomponent.bundle.css \
 		lib/leaflet.css \
-		src/sfomuseum.wayfinding.leaflet.css
+		lib/sfomuseum.wayfinding.steps.css \
+		src/sfomuseum.wayfinding.*.css

@@ -7,7 +7,9 @@
 	
 	<template id="sfomuseum-wayfinding-map-template">
 	    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css" />
+	    <link rel="stylesheet" type="text/css" href="../lib/sfomuseum.wayfinding.steps.css" />	    	 	    
 	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.leaflet.css" />
+	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.map.css" />	    	    
 	    <style type="text/css">
 	     .wayfinding-map-wrapper {
 		     width: 100%;
@@ -28,10 +30,10 @@
 	</template>
 	
 	<div id="routes">
-		<sfomuseum-wayfinding-map from="1796982269" to="1745903711" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
-		<sfomuseum-wayfinding-map from="1796889497" to="1763594985" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
-		<sfomuseum-wayfinding-map from="1796982281" to="1763588201" disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
-		<sfomuseum-wayfinding-map from="1763588159" to="1729813735" disable-scroll arrowheads api-endpoint="wasm:///?uri=../lib/sfomuseum_route.wasm"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796982269" to="1745903711" show-steps disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796889497" to="1763594985" show-steps disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1796982281" to="1763588201" show-steps disable-scroll arrowheads api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-map>
+		<sfomuseum-wayfinding-map from="1763588159" to="1729813735" show-steps disable-scroll arrowheads api-endpoint="wasm:///?uri=../lib/sfomuseum_route.wasm"></sfomuseum-wayfinding-map>
 	</div>
 	
     </body>
@@ -46,7 +48,8 @@
     <script type="text/javascript" src="../lib/sfomuseum.maps.protomaps.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.wayfinding.maps.js"></script>
     <script type="text/javascript" src="../lib/sfomuseum.wayfinding.route.js"></script>
-    <script type="text/javascript" src="../lib/sfomuseum.wayfinding.steps.js"></script>        
+    <script type="text/javascript" src="../lib/sfomuseum.wayfinding.steps.js"></script>
+    <script type="text/javascript" src="../lib/sfomuseum.wayfinding.extensions.js"></script>            
     <script type="text/javascript" src="../lib/sfomuseum.wasm.js"></script>
     <script type="text/javascript" src="../lib/wasm_exec.js"></script>    
     
