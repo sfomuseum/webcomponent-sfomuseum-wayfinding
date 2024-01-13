@@ -13,9 +13,26 @@ sfomuseum-wayfinding {
 #sfomuseum-wayfinding-dialog-iframe {
     /* set inline in javascript because webcomponent/shadow root */
 }
-    
-.sfomuseum-wayfinding {
 
+#sfomuseum-wayfinding-map-steps-dialog {
+	width: 90vw;
+	border: solid 5px #8a741d;	
+}
+
+#sfomuseum-wayfinding-map-steps-dialog-close {
+	display:grid;
+	justify-content:right;
+	margin-right:1rem;
+}
+
+#sfomuseum-wayfinding-map-steps-dialog-close-button {
+	color: #8a741d;
+	border: solid 1px #8a741d;
+	border-radius: 80px;
+	background-color: transparent;
+	width: 25px;
+	height: 25px;
+	font-weight: 700;
 }
 
 .steps-map {

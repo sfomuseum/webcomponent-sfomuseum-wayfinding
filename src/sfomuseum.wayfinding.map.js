@@ -313,9 +313,10 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 		close_btn.setAttribute("value", "X");
 		
 		close_div.appendChild(close_btn);
-		
+
+		form.appendChild(close_div);		
 		form.appendChild(steps_div);	
-		form.appendChild(close_div);
+		// form.appendChild(close_div);
 		
 		dialog_el.appendChild(form);	    
 		wrapper.appendChild(dialog_el);	    
@@ -333,10 +334,6 @@ class SFOMuseumWayfindingMapElement extends HTMLElement {
 		    
 		    var map_els = steps_list.getElementsByClassName("steps-map");
 		    var count_els = map_els.length;
-
-		    for (var m=0; m < count_els; m++){
-			map_els[m].setAttribute("style", "height: 270px;border:1px solid red;");
-		    }		   
 		    
 		    dialog_el.showModal();
 
