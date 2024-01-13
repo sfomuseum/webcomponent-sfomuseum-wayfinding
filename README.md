@@ -2,11 +2,17 @@
 
 Custom Web Components for the SFO Museum Wayfinding system.
 
+## Important
+
+As of this writing these are SFO Museum specific Web Components. They are not generic or abstract elements to use in any other environment. This code is being made public in the spirit of generousity and as an example of how we approach the practice of developing Web Components for our needs.
+
 ## Documentation
 
 Documentation is incomplete at this time. Consult the [www](www) folder for working examples.
 
-## <sfomuseum-wayfinding-chooser>
+## sfomuseum-wayfinding-chooser
+
+An inline wayfinding select menu to choose and display a route to a fixed waypoint from a list of options. Once selected the route will be displayed in a (modal) `dialog` element that itself contains a new `<sfomuseum-wayfinding-map>` Web Component.
 
 ```
 <template id="sfomuseum-wayfinding-chooser-template">
@@ -45,7 +51,9 @@ Documentation is incomplete at this time. Consult the [www](www) folder for work
 
 ![](docs/images/sfomuseum-wayfinding-chooser-steps.png)
 
-## <sfomuseum-wayfinding-map>
+## sfomuseum-wayfinding-map
+
+An inline (Leaflet/Protomaps) map depicting the route between two waypoints.
 
 ```
 <template id="sfomuseum-wayfinding-map-template">
@@ -78,8 +86,3 @@ Documentation is incomplete at this time. Consult the [www](www) folder for work
 
 ![](docs/images/sfomuseum-wayfinding-map.png)
 
-## See also
-
-* https://github.com/sfomuseum/go-sfomuseum-wayfinding
-* https://github.com/sfomuseum/go-sfomuseum-wayfinding-www
-* https://github.com/sfomuseum/go-sfomuseum-wayfinding-offline (WASM)
