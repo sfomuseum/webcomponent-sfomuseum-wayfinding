@@ -169,9 +169,18 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    dialog.showModal();
 	    return false;
 	}
-	
+
 	var wrapper = document.createElement("div");
 	wrapper.setAttribute("class", "sfomuseum-wayfinding");
+
+	var prefix_str = this.getAttribute("prefix");
+
+	if (prefix_str){
+	    var prefix_el = document.createElement("span");
+	    prefix_el.appendChild(document.createTextNode(prefix_str));
+	    wrapper.appendChild(prefix_el);
+	}
+
 	wrapper.appendChild(sel);
 	wrapper.appendChild(btn);
 
