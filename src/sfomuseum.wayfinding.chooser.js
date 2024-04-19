@@ -81,7 +81,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 		return false;
 	    }
 	    
-	    destinations[] = desintation_id;
+	    destinations.push(destination_id);
 	}
 	
 	var tpl_id = "sfomuseum-wayfinding-chooser-template";
@@ -230,9 +230,10 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    dialog.appendChild(form);
 	    wrapper.appendChild(dialog);
+
+	    shadow.appendChild(wrapper);	    
 	}
-	
-	shadow.appendChild(wrapper);
+
     }
 
     sort(items, key) {
