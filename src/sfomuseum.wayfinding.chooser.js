@@ -56,19 +56,34 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    console.log("Failed to initialize network, can not attach shadow");
 	    return false;
 	}
+
+	var str_destinations = this.getAttribute("destination").split(",");
+	var count_destinations = str_destinations.length;
 	
-	var destination = parseInt(this.getAttribute("destination"));
-
-	if (destination === NaN){
-	    console.log("Invalid destination attribute");
-	    return;
-	}
-
-	if (! this.network[destination]){
-	    console.log("Unknown destination point");
+	if (count_destinations == 0){
+	    console.log("Missing destinations");
 	    return false;
 	}
 
+	var destinations = [];
+
+	for (var i=0; i < count_destinations; i++){
+
+	    var destination_id = parseInt(str_destinations[i]);
+	    
+	    if (destination_id === NaN){
+		console.log("Invalid destination attribute", str_destinations[i]);
+		return;
+	    }
+
+	    if (! this.network[destination_id]){
+		console.log("Unknown destination point");
+		return false;
+	    }
+	    
+	    destinations[] = desintation_id;
+	}
+	
 	var tpl_id = "sfomuseum-wayfinding-chooser-template";
 	
 	if (this.hasAttribute("template-id")){
@@ -81,135 +96,142 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    let tpl_content = tpl.content;
 	    shadow.appendChild(tpl_content.cloneNode(true));
 	}
+
+	// This is not right...
 	
-	var candidates = [];
-	var terminals = [];
-	var gates = [];
-	
-	var sel = document.createElement("select");
-	sel.setAttribute("id", "sfomuseum-wayfinding-chooser-select");
-	
-	for (var id in this.network){
+	for (var i=0; i < count_destinations; i++) {
+
+	    var destination = destinations[i];
 	    
-	    if (id == destination){
-		continue;
+	    var candidates = [];
+	    var terminals = [];
+	    var gates = [];
+	    
+	    var sel = document.createElement("select");
+	    sel.setAttribute("id", "sfomuseum-wayfinding-chooser-select");
+	    
+	    for (var id in this.network){
+		
+		if (id == destination){
+		    continue;
+		}
+		
+		var wp = this.network[id];
+		
+		if (wp.placetype == "commonarea"){
+		    terminals.push(wp);
+		    continue;
+		}
+		
+		if (wp.placetype == "gate"){
+		    gates.push(wp);
+		    continue;
+		}
 	    }
 	    
-	    var wp = this.network[id];
-
-	    if (wp.placetype == "commonarea"){
-		terminals.push(wp);
-		continue;
-	    }
-
-	    if (wp.placetype == "gate"){
-		gates.push(wp);
-		continue;
-	    }
-	}
-
-	terminals = this.sort(terminals, "name");
-	gates = this.sort(gates, "name");
-
-	var candidates = terminals.concat(gates);
-	var count = candidates.length;
-
-	for (var i=0; i < count; i++){
-
-	    var wp = candidates[i];
+	    terminals = this.sort(terminals, "name");
+	    gates = this.sort(gates, "name");
 	    
-	    var opt = document.createElement("option");
-	    opt.setAttribute("value", wp.id);
-	    opt.appendChild(document.createTextNode(wp.name));
-	    sel.appendChild(opt);
-	}
-	
-	var btn = document.createElement("button");
-	btn.setAttribute("id", "sfomuseum-wayfinding-chooser-button");
-	
-	/* https://icons.getbootstrap.com/icons/map/ */
-	btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
+	    var candidates = terminals.concat(gates);
+	    var count = candidates.length;
+	    
+	    for (var i=0; i < count; i++){
+		
+		var wp = candidates[i];
+		
+		var opt = document.createElement("option");
+		opt.setAttribute("value", wp.id);
+		opt.appendChild(document.createTextNode(wp.name));
+		sel.appendChild(opt);
+	    }
+	    
+	    var btn = document.createElement("button");
+	    btn.setAttribute("id", "sfomuseum-wayfinding-chooser-button");
+	    
+	    /* https://icons.getbootstrap.com/icons/map/ */
+	    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"/>
-</svg>`;
-
-	btn.onclick = function(){
-
-	    var from = sel.value;
-
-	    if (! _self.network[from]){
-		console.log("Unknown starting point");
+	    </svg>`;
+	    
+	    btn.onclick = function(){
+		
+		var from = sel.value;
+		
+		if (! _self.network[from]){
+		    console.log("Unknown starting point");
+		    return false;
+		}
+		
+		var map_el = document.createElement("sfomuseum-wayfinding-map");
+		map_el.setAttribute("from", from);
+		map_el.setAttribute("to", destination);	    
+		map_el.setAttribute("api-endpoint", _self.getAttribute("api-endpoint"));
+		
+		if (_self.hasAttribute("arrowheads")){
+		    map_el.setAttribute("arrowheads", "true");
+		}
+		
+		if (_self.hasAttribute("disable-scroll")){
+		    map_el.setAttribute("disable-scroll", "true");
+		}
+		
+		if (_self.hasAttribute("show-steps")){
+		    map_el.setAttribute("show-steps", "true");
+		}
+		
+		var root = _self.shadowRoot;
+		
+		var map_div = root.getElementById("sfomuseum-wayfinding-chooser-dialog-map");
+		map_div.innerHTML = "";
+		
+		map_div.appendChild(map_el);
+	    
+		var dialog = root.getElementById("sfomuseum-wayfinding-chooser-dialog");
+		dialog.showModal();
 		return false;
-	    }
+	    };	
 
-	    var map_el = document.createElement("sfomuseum-wayfinding-map");
-	    map_el.setAttribute("from", from);
-	    map_el.setAttribute("to", destination);	    
-	    map_el.setAttribute("api-endpoint", _self.getAttribute("api-endpoint"));
-
-	    if (_self.hasAttribute("arrowheads")){
-		map_el.setAttribute("arrowheads", "true");
-	    }
-
-	    if (_self.hasAttribute("disable-scroll")){
-		map_el.setAttribute("disable-scroll", "true");
-	    }
-
-	    if (_self.hasAttribute("show-steps")){
-		map_el.setAttribute("show-steps", "true");
+	    var wrapper = document.createElement("div");
+	    wrapper.setAttribute("class", "sfomuseum-wayfinding");
+	    
+	    var prefix_str = this.getAttribute("prefix");
+	    
+	    if (prefix_str){
+		var prefix_el = document.createElement("span");
+		prefix_el.appendChild(document.createTextNode(prefix_str));
+		wrapper.appendChild(prefix_el);
 	    }
 	    
-	    var root = _self.shadowRoot;
-
-	    var map_div = root.getElementById("sfomuseum-wayfinding-chooser-dialog-map");
-	    map_div.innerHTML = "";
+	    wrapper.appendChild(sel);
+	    wrapper.appendChild(btn);
 	    
-	    map_div.appendChild(map_el);
+	    var dialog = document.createElement("dialog");
+	    dialog.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog");
 	    
-	    var dialog = root.getElementById("sfomuseum-wayfinding-chooser-dialog");
-	    dialog.showModal();
-	    return false;
+	    var form = document.createElement("form");
+	    form.setAttribute("method", "dialog");
+	    
+	    var map_div = document.createElement("div");
+	    map_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-map");
+	    
+	    var close_div = document.createElement("div");
+	    close_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close");
+	    
+	    var close_btn = document.createElement("input");
+	    close_btn.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close-button");
+	    
+	    close_btn.setAttribute("type", "submit");
+	    close_btn.setAttribute("value", "X");
+	    
+	    close_div.appendChild(close_btn);
+	    
+	    form.appendChild(map_div);	
+	    form.appendChild(close_div);
+	    
+	    dialog.appendChild(form);
+	    wrapper.appendChild(dialog);
 	}
-
-	var wrapper = document.createElement("div");
-	wrapper.setAttribute("class", "sfomuseum-wayfinding");
-
-	var prefix_str = this.getAttribute("prefix");
-
-	if (prefix_str){
-	    var prefix_el = document.createElement("span");
-	    prefix_el.appendChild(document.createTextNode(prefix_str));
-	    wrapper.appendChild(prefix_el);
-	}
-
-	wrapper.appendChild(sel);
-	wrapper.appendChild(btn);
-
-	var dialog = document.createElement("dialog");
-	dialog.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog");
-
-	var form = document.createElement("form");
-	form.setAttribute("method", "dialog");
-
-	var map_div = document.createElement("div");
-	map_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-map");
 	
-	var close_div = document.createElement("div");
-	close_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close");
-
-	var close_btn = document.createElement("input");
-	close_btn.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close-button");
-	
-	close_btn.setAttribute("type", "submit");
-	close_btn.setAttribute("value", "X");
-
-	close_div.appendChild(close_btn);
-
-	form.appendChild(map_div);	
-	form.appendChild(close_div);
-
-	dialog.appendChild(form);
-	wrapper.appendChild(dialog);
-
 	shadow.appendChild(wrapper);
     }
 
