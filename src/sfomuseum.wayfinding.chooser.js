@@ -83,7 +83,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    destinations.push(destination_id);
 	}
-	
+
 	var tpl_id = "sfomuseum-wayfinding-chooser-template";
 	
 	if (this.hasAttribute("template-id")){
@@ -97,12 +97,10 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    shadow.appendChild(tpl_content.cloneNode(true));
 	}
 
-	// This is not right...
-	
-	for (var i=0; i < count_destinations; i++) {
+	for (var d=0; d < count_destinations; d++) {
 
-	    var destination = destinations[i];
-	    
+	    var destination = destinations[d];
+
 	    var candidates = [];
 	    var terminals = [];
 	    var gates = [];
@@ -231,6 +229,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    dialog.appendChild(form);
 	    wrapper.appendChild(dialog);
 
+	    console.log("APPEND", wrapper);
 	    shadow.appendChild(wrapper);	    
 	}
 
