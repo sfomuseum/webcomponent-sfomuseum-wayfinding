@@ -116,6 +116,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    var sel = document.createElement("select");
 	    sel.setAttribute("id", select_id);
+	    sel.setAttribute("class", "sfomuseum-wayfinding-chooser-select");
 	    sel.setAttribute("data-destination", destination);
 	    
 	    for (var id in this.network){
@@ -155,6 +156,7 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    var btn = document.createElement("button");
 	    btn.setAttribute("id", button_id);
+	    btn.setAttribute("class", "sfomuseum-wayfinding-chooser-button");
 	    btn.setAttribute("data-destination", destination);
 	    
 	    /* https://icons.getbootstrap.com/icons/map/ */
@@ -262,19 +264,22 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    var dialog = document.createElement("dialog");
 	    dialog.setAttribute("id", dialog_id);
+	    dialog.setAttribute("class", "sfomuseum-wayfinding-chooser-dialog");
 	    
 	    var form = document.createElement("form");
 	    form.setAttribute("method", "dialog");
 	    
 	    var map_div = document.createElement("div");
 	    map_div.setAttribute("id", dialog_map_id);
+	    map_div.setAttribute("class", "sfomuseum-wayfinding-chooser-dialog-map");
 	    
 	    var close_div = document.createElement("div");
 	    close_div.setAttribute("id", dialog_close_div_id);
+	    close_div.setAttribute("class", "sfomuseum-wayfinding-chooser-dialog-close");
 	    
 	    var close_btn = document.createElement("input");
 	    close_btn.setAttribute("id", dialog_close_button_id);
-	    
+	    close_btn.setAttribute("class", "sfomuseum-wayfinding-chooser-dialog-close-button");
 	    close_btn.setAttribute("type", "submit");
 	    close_btn.setAttribute("value", "X");
 	    
