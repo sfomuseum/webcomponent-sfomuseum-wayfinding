@@ -95,7 +95,7 @@ An inline (Leaflet/Protomaps) map depicting the route between two waypoints.
 
 | Name | Value | Required | Notes |
 | --- | --- | --- | --- |
-| to | A comma-separated list of valid waypoint IDs | yes | |
+| to | A valid waypoint ID | yes | |
 | from | A valid waypoint ID | yes | |
 | show-steps | | no | Display a link to open a modal dialog with step-by-step maps |
 | disable-scroll | | no | Display the Leaflet map scroll wheel listener |
