@@ -42,7 +42,7 @@ An inline wayfinding select menu to choose and display a route to a fixed waypoi
 
 | Name | Value | Required | Notes |
 | --- | --- | --- | --- |
-| destination | A valid waypoint ID | yes | |
+| destination | A comma-separated list of valid waypoint IDs | yes | |
 | show-steps | | no | Display a link to open a modal dialog with step-by-step maps |
 | disable-scroll | | no | Display the Leaflet map scroll wheel listener |
 | arrowheads | | no | Display arrowheads at the end (front) of a route |
@@ -95,7 +95,7 @@ An inline (Leaflet/Protomaps) map depicting the route between two waypoints.
 
 | Name | Value | Required | Notes |
 | --- | --- | --- | --- |
-| to | A valid waypoint ID | yes | |
+| to | A comma-separated list of valid waypoint IDs | yes | |
 | from | A valid waypoint ID | yes | |
 | show-steps | | no | Display a link to open a modal dialog with step-by-step maps |
 | disable-scroll | | no | Display the Leaflet map scroll wheel listener |

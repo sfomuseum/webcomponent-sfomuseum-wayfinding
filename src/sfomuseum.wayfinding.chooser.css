@@ -1,4 +1,4 @@
-#sfomuseum-wayfinding-chooser-select {
+.sfomuseum-wayfinding-chooser-select {
 	border-radius: 0px;
 	border: none;
 	border-bottom: solid thin;
@@ -8,14 +8,14 @@
 	color: #5d5d5d;
 }
 
-#sfomuseum-wayfinding-chooser-button {
+.sfomuseum-wayfinding-chooser-button {
 	border-radius:0px;
 	border:none;
 	background-color: transparent;
 	margin-left:.5rem;
 }
 
-#sfomuseum-wayfinding-chooser-dialog-close-button {
+.sfomuseum-wayfinding-chooser-dialog-close-button {
 	color: #8a741d;
 	border: solid 1px #8a741d;
 	border-radius: 80px;
@@ -25,17 +25,24 @@
 	font-weight: 700;
 }
 
-#sfomuseum-wayfinding-chooser-dialog {
+.sfomuseum-wayfinding-chooser-dialog {
 	width: 90vw;
 	border: solid 5px #8a741d;
 }
 
-#sfomuseum-wayfinding-chooser-dialog-close {
+.sfomuseum-wayfinding-chooser-dialog-close {
 	display:grid;
 	justify-content:right;
 	margin-bottom:1rem;
 }
 
-#sfomuseum-wayfinding-chooser-dialog-map {
+.sfomuseum-wayfinding-chooser-dialog-map {
 	margin-top:2rem;
+}
+
+.sfomuseum-wayfinding-chooser-label {
+	font-size:small;
+	font-style:italic;
+	margin-bottom: 1rem;
+	margin-top:.25rem;
 }

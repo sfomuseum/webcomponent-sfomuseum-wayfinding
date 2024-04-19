@@ -1,0 +1,41 @@
+<html>
+    <head>
+	<title>SFO Museum Wayfinding Web Component Example</title>
+	<link rel="stylesheet" type="text/css" href="chooser.css" />	
+    </head>
+    <body>
+
+	<template id="sfomuseum-wayfinding-chooser-template">
+	    <link rel="stylesheet" type="text/css" href="../src/sfomuseum.wayfinding.chooser.css" />
+	</template>
+
+	<template id="sfomuseum-wayfinding-map-template">
+	    <link rel="stylesheet" type="text/css" href="../dist/sfomuseum.wayfinding.webcomponent.bundle.css" />	    
+	    <style type="text/css">
+	     .wayfinding-map-wrapper {
+		     width: 95%;
+		     margin:1rem;
+		     margin: 0 auto;
+	     }
+	     .wayfinding-map {
+		     height: 300px;
+		     width: 100%;		     
+		     border:solid thin;
+	     }
+	     
+	     .wayfinding-map-caption {
+		     font-size:small;
+		     margin-top: .5rem;
+		     line-height: 1.1rem;
+	     }
+	    </style>
+	</template>
+	
+	<div id="routes">
+		<sfomuseum-wayfinding-chooser destination="1763588545,1763588543" show-steps disable-scroll arrowheads api-endpoint="wasm://?uri=../lib/sfomuseum_route.wasm" x-api-endpoint="http://localhost:8080/wayfinding/api"></sfomuseum-wayfinding-chooser>
+	</div>
+
+    </body>
+
+    <script type="text/javascript" src="../dist/sfomuseum.wayfinding.webcomponent.bundle.js"></script>        
+</html>
