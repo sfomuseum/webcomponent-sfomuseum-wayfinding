@@ -104,9 +104,19 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    var candidates = [];
 	    var terminals = [];
 	    var gates = [];
+
+	    var wrapper_id = "sfomuseum-wayfinding-chooser-" + destination;
+	    var select_id = "sfomuseum-wayfinding-chooser-select-" + destination;
+	    var dialog_id = "sfomuseum-wayfinding-chooser-dialog-" + destination;
+	    var dialog_close_div_id = "sfomuseum-wayfinding-chooser-dialog-close-" + destination;
+	    var dialog_close_button_id = "sfomuseum-wayfinding-chooser-dialog-close-button-" + destination;
+	    
+	    var dialog_map_id = "sfomuseum-wayfinding-chooser-dialog-map-" + destination;
+	    var button_id = "sfomuseum-wayfinding-chooser-button-" + destination;
 	    
 	    var sel = document.createElement("select");
-	    sel.setAttribute("id", "sfomuseum-wayfinding-chooser-select");
+	    sel.setAttribute("id", select_id);
+	    sel.setAttribute("data-destination", destination);
 	    
 	    for (var id in this.network){
 		
@@ -144,14 +154,48 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    }
 	    
 	    var btn = document.createElement("button");
-	    btn.setAttribute("id", "sfomuseum-wayfinding-chooser-button");
+	    btn.setAttribute("id", button_id);
+	    btn.setAttribute("data-destination", destination);
 	    
 	    /* https://icons.getbootstrap.com/icons/map/ */
-	    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"/>
-	    </svg>`;
+	    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8a741d" class="bi bi-map" viewBox="0 0 16 16" data-destination="` + destination + `"><path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"/></svg>`;
 	    
-	    btn.onclick = function(){
+	    btn.onclick = function(e){
+
+		var root = _self.shadowRoot;
+		
+		var el = e.target;
+
+		if (el.nodeName == "path"){
+		    el = el.parentNode;
+		}
+		
+		var destination = el.getAttribute("data-destination");
+
+		if (! destination){
+		    console.log("Button element is missing data-destination attribute", el);
+		    return false;
+		}
+		
+		var to = parseInt(destination);
+
+		if (to == NaN){
+		    console.log("Invalid destination", el.getAttribute("data-destination"));
+		    return false;
+		}
+
+		if (! _self.network[to]){
+		    console.log("Unknown destination point", to);
+		    return false;
+		}
+
+		var select_id = "sfomuseum-wayfinding-chooser-select-" + to;
+		var sel = root.getElementById(select_id);
+
+		if (! sel){
+		    console.log("Failed to retrieve select element", select_id);
+		    return false;
+		}
 		
 		var from = sel.value;
 		
@@ -159,10 +203,14 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 		    console.log("Unknown starting point");
 		    return false;
 		}
+
+		var destination = sel.getAttribute("data-destination");
+
+		console.log("route from", from, "route to", to);
 		
 		var map_el = document.createElement("sfomuseum-wayfinding-map");
 		map_el.setAttribute("from", from);
-		map_el.setAttribute("to", destination);	    
+		map_el.setAttribute("to", to);	    
 		map_el.setAttribute("api-endpoint", _self.getAttribute("api-endpoint"));
 		
 		if (_self.hasAttribute("arrowheads")){
@@ -175,21 +223,20 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 		
 		if (_self.hasAttribute("show-steps")){
 		    map_el.setAttribute("show-steps", "true");
-		}
+		}	
 		
-		var root = _self.shadowRoot;
-		
-		var map_div = root.getElementById("sfomuseum-wayfinding-chooser-dialog-map");
+		var map_div = root.getElementById(dialog_map_id);
 		map_div.innerHTML = "";
 		
 		map_div.appendChild(map_el);
 	    
-		var dialog = root.getElementById("sfomuseum-wayfinding-chooser-dialog");
+		var dialog = root.getElementById(dialog_id);
 		dialog.showModal();
 		return false;
 	    };	
 
 	    var wrapper = document.createElement("div");
+	    wrapper.setAttribute("id", wrapper_id);
 	    wrapper.setAttribute("class", "sfomuseum-wayfinding");
 	    
 	    var prefix_str = this.getAttribute("prefix");
@@ -202,21 +249,31 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    
 	    wrapper.appendChild(sel);
 	    wrapper.appendChild(btn);
+
+	    if (count_destinations > 1){
+		var label = "to " + _self.network[destination]["name"];
+	    
+		var label_div = document.createElement("div");
+		label_div.setAttribute("class", "sfomuseum-wayfinding-chooser-label");
+		
+		label_div.appendChild(document.createTextNode(label));
+		wrapper.appendChild(label_div);
+	    }
 	    
 	    var dialog = document.createElement("dialog");
-	    dialog.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog");
+	    dialog.setAttribute("id", dialog_id);
 	    
 	    var form = document.createElement("form");
 	    form.setAttribute("method", "dialog");
 	    
 	    var map_div = document.createElement("div");
-	    map_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-map");
+	    map_div.setAttribute("id", dialog_map_id);
 	    
 	    var close_div = document.createElement("div");
-	    close_div.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close");
+	    close_div.setAttribute("id", dialog_close_div_id);
 	    
 	    var close_btn = document.createElement("input");
-	    close_btn.setAttribute("id", "sfomuseum-wayfinding-chooser-dialog-close-button");
+	    close_btn.setAttribute("id", dialog_close_button_id);
 	    
 	    close_btn.setAttribute("type", "submit");
 	    close_btn.setAttribute("value", "X");
@@ -229,7 +286,6 @@ class SFOMuseumWayfindingChooserElement extends HTMLElement {
 	    dialog.appendChild(form);
 	    wrapper.appendChild(dialog);
 
-	    console.log("APPEND", wrapper);
 	    shadow.appendChild(wrapper);	    
 	}
 

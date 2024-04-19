@@ -39,3 +39,10 @@
 #sfomuseum-wayfinding-chooser-dialog-map {
 	margin-top:2rem;
 }
+
+.sfomuseum-wayfinding-chooser-label {
+	font-size:small;
+	font-style:italic;
+	margin-bottom: 1rem;
+	margin-top:.25rem;
+}
